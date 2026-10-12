@@ -1,0 +1,101 @@
+NUP,Nama Barang,Merk/Tipe,Tahun,Jumlah,Ruangan,Kondisi
+KPR-001,Handy Talky (HT),Motorola CP1660,2022,15,Ruang KPR,Baik
+KPR-002,Borgol Tangan Besi,Polri Standard,2021,50,Ruang KPR,Baik
+KPR-003,Borgol Kaki,Polri Standard,2021,20,Ruang KPR,Baik
+KPR-004,Tongkat T (Polimer),Dalmas,2020,35,Ruang KPR,Baik
+KPR-005,Metal Detector Wand,Garrett,2023,5,Ruang KPR,Baik
+KPR-006,Walkthrough Metal Detector,Garrett,2019,1,Ruang KPR,Baik
+KPR-007,Senjata Laras Licin (Pepper Gun),Pindad,2018,4,Ruang KPR,Baik
+KPR-008,Rompi Anti Peluru,Kevlar Level IIIA,2020,10,Ruang KPR,Baik
+KPR-009,Helm PHH (Huru Hara),Dalmas,2020,25,Ruang KPR,Baik
+KPR-010,Tameng PHH Polycarbonate,Dalmas,2020,25,Ruang KPR,Rusak Ringan
+KPR-011,Senter Jarak Jauh,Nitecore,2022,8,Ruang KPR,Baik
+KPR-012,Kamera CCTV Dome,Hikvision 2MP,2021,32,Ruang KPR,Baik
+KPR-013,Kamera CCTV PTZ (Outdoor),Hikvision,2021,8,Ruang KPR,Baik
+KPR-014,Monitor CCTV 32 Inch,Samsung,2021,4,Ruang KPR,Baik
+KPR-015,DVR CCTV 32 Channel,Hikvision,2021,2,Ruang KPR,Baik
+KPR-016,Komputer PC (Admin KPR),Lenovo V50t,2022,2,Ruang KPR,Baik
+KPR-017,Lemari Senjata Besi,Krisbow,2018,2,Ruang KPR,Baik
+KPR-018,Lonceng Apel / Alarm,Brass Custom,2015,1,Ruang KPR,Baik
+KPR-019,Megaphone / Toa,Sirene Toa,2021,4,Ruang KPR,Baik
+KPR-020,Mesin X-Ray Barang,Astrophysics,2019,1,Ruang KPR,Baik
+BLK-001,Matras Tidur WBP,Busa Super,2022,150,Blok Hunian,Baik
+BLK-002,Matras Tidur WBP,Busa Super,2020,50,Blok Hunian,Rusak Ringan
+BLK-003,Kipas Angin Dinding 16 Inch,Maspion,2021,24,Blok Hunian,Baik
+BLK-004,Kipas Angin Dinding 16 Inch,Maspion,2021,6,Blok Hunian,Rusak Berat
+BLK-005,Kipas Angin Exhaust,Panasonic,2021,12,Blok Hunian,Baik
+BLK-006,Gembok Sel Baja Kuningan,American Tool 60mm,2023,60,Blok Hunian,Baik
+BLK-007,Gembok Sel Baja Kuningan,American Tool 60mm,2021,15,Blok Hunian,Rusak Ringan
+BLK-008,Dispenser Air Galon,Miyako,2022,8,Blok Hunian,Baik
+BLK-009,Televisi LCD 32 Inch,Polytron,2020,4,Blok Hunian,Baik
+BLK-010,Speaker Corong (Paging),Toa ZH-5025B,2019,10,Blok Hunian,Baik
+BLK-011,Lampu Darurat (Emergency),Krisbow,2022,15,Blok Hunian,Baik
+BLK-012,Alat Pemadam Api (APAR) 3Kg,Servvo,2023,10,Blok Hunian,Baik
+BLK-013,Kotak P3K Dinding,Maspion,2021,8,Blok Hunian,Baik
+BLK-014,Tempat Sampah Roda 120L,Krisbow,2022,6,Blok Hunian,Baik
+BLK-015,Tandon Air Panel,Penguin 5000L,2018,4,Blok Hunian,Baik
+BLK-016,Pompa Air Pendorong,Shimizu,2020,2,Blok Hunian,Baik
+BLK-017,Loker Penitipan Barang,Brother 12 Pintu,2019,4,Blok Hunian,Baik
+BLK-018,Papan Informasi Akrilik,Custom,2021,6,Blok Hunian,Baik
+BLK-019,Troli Galon Air,Besi Custom,2020,3,Blok Hunian,Rusak Ringan
+BLK-020,Meja Tenis Meja (Rekreasi),Butterfly,2019,1,Blok Hunian,Baik
+MED-001,Ranjang Pasien 1 Engkol,Paramount Bed,2019,4,Poliklinik,Baik
+MED-002,Ranjang Pasien 1 Engkol,Paramount Bed,2015,2,Poliklinik,Rusak Ringan
+MED-003,Tabung Oksigen Besar 6m3,Samator,2020,3,Poliklinik,Baik
+MED-004,Tabung Oksigen Kecil 1m3,Samator,2021,5,Poliklinik,Baik
+MED-005,Regulator Oksigen Medical,Sharp,2021,8,Poliklinik,Baik
+MED-006,Kursi Roda Standard,Sella,2020,4,Poliklinik,Baik
+MED-007,Timbangan Badan & Tinggi,Gea,2022,2,Poliklinik,Baik
+MED-008,Tensimeter Digital,Omron,2023,4,Poliklinik,Baik
+MED-009,Tensimeter Raksa,Riester,2016,2,Poliklinik,Rusak Berat
+MED-010,Termometer Gun Digital,ThermoOne,2021,6,Poliklinik,Baik
+MED-011,Stetoskop Dewasa,Littmann Classic,2022,3,Poliklinik,Baik
+MED-012,Lemari Kaca Obat 2 Pintu,Bina Medika,2018,3,Poliklinik,Baik
+MED-013,Sterilisator Medis Kering,Corona,2019,1,Poliklinik,Baik
+MED-014,Minor Surgery Set,Renz,2020,2,Poliklinik,Baik
+MED-015,Tiang Infus Stainless,Sella,2020,6,Poliklinik,Baik
+MED-016,Ranjang Periksa (Examination),Sella,2019,2,Poliklinik,Baik
+MED-017,Lampu Periksa Halogen,Gea,2021,2,Poliklinik,Baik
+MED-018,Meja Troli Medis 2 Susun,Stainless,2020,3,Poliklinik,Baik
+MED-019,Kursi Tunggu Pasien 4 Dudukan,Chitose,2018,2,Poliklinik,Baik
+MED-020,Kulkas Penyimpan Vaksin/Obat,Gea Medical,2021,1,Poliklinik,Baik
+DAP-001,Kompor Gas High Pressure,Zeppelin,2022,6,Dapur,Baik
+DAP-002,Kompor Gas High Pressure,Zeppelin,2019,2,Dapur,Rusak Berat
+DAP-003,Panci Dandang Nasi 50L,Bima,2021,8,Dapur,Baik
+DAP-004,Kuali Besi Super Besar (Wajan),Custom,2020,4,Dapur,Baik
+DAP-005,Kuali Besi Super Besar (Wajan),Custom,2017,2,Dapur,Rusak Ringan
+DAP-006,Freezer Box Daging 600L,Gea,2021,2,Dapur,Baik
+DAP-007,Freezer Box Ikan 300L,RSA,2019,2,Dapur,Baik
+DAP-008,Kulkas Sayur 2 Pintu,Sharp,2022,2,Dapur,Baik
+DAP-009,Meja Kerja Stainless Steel (Preparation),Mutu,2023,4,Dapur,Baik
+DAP-010,Rak Piring Stainless 4 Susun,Mutu,2021,6,Dapur,Baik
+DAP-011,Blender Bumbu Komersil 5L,Getra,2022,2,Dapur,Baik
+DAP-012,Mesin Parut Kelapa,Rakitan,2020,1,Dapur,Baik
+DAP-013,Timbangan Duduk Digital 30Kg,Nankai,2022,2,Dapur,Baik
+DAP-014,Timbangan Duduk Manual 100Kg,Nhon Hoa,2018,1,Dapur,Baik
+DAP-015,Termos Nasi Besar 30L,Lion Star,2023,10,Dapur,Baik
+DAP-016,Troli Makanan (Food Trolley),Stainless,2021,4,Dapur,Baik
+DAP-017,Spatula Kayu Super Besar,Custom,2022,10,Dapur,Baik
+DAP-018,Pisau Potong Daging (Cleaver),Tramontina,2023,6,Dapur,Baik
+DAP-019,Talenan Plastik Tebal Besar,Lion Star,2023,8,Dapur,Baik
+DAP-020,Bak Cuci Piring (Sink) 2 Lubang,Royal,2020,3,Dapur,Baik
+GDG-001,Lemari Arsip Besi 2 Pintu,Brother,2020,15,Gudang BMN,Baik
+GDG-002,Lemari Arsip Besi 2 Pintu,Brother,2016,5,Gudang BMN,Rusak Ringan
+GDG-003,Brankas Besi Dokumen,Chubb Safes,2015,2,Gudang BMN,Baik
+GDG-004,Printer Laser Hitam Putih,HP LaserJet Pro,2022,8,Gudang BMN,Baik
+GDG-005,Printer Inkjet Warna,Epson L3110,2020,5,Gudang BMN,Baik
+GDG-006,Mesin Penghancur Kertas,Origin,2021,3,Gudang BMN,Baik
+GDG-007,Komputer Desktop (PC),Lenovo ThinkCentre,2022,12,Gudang BMN,Baik
+GDG-008,Laptop Operasional Kantor,Asus ExpertBook,2023,6,Gudang BMN,Baik
+GDG-009,Proyektor LCD,Epson EB-X400,2021,3,Gudang BMN,Baik
+GDG-010,Layar Proyektor Tripod 70 Inch,ScreenView,2021,3,Gudang BMN,Baik
+GDG-011,AC Split 1 PK,Daikin,2024,10,Gudang BMN,Baik
+GDG-012,Mesin Absensi Sidik Jari,Solution,2019,4,Gudang BMN,Baik
+GDG-013,Genset Cadangan 5000W,Honda,2018,2,Gudang BMN,Baik
+GDG-014,Mesin Potong Rumput Gendong,Tasco,2022,4,Gudang BMN,Baik
+GDG-015,Kursi Kerja Putar,Indachi,2021,25,Gudang BMN,Baik
+GDG-016,Kursi Kerja Putar,Indachi,2018,10,Gudang BMN,Rusak Ringan
+GDG-017,Meja Kerja Biro,Olympic,2020,20,Gudang BMN,Baik
+GDG-018,Sofa Tamu Ruang Tunggu,Informa,2021,4,Gudang BMN,Baik
+GDG-019,Sepeda Motor Dinas,Honda Revo,2017,3,Gudang BMN,Baik
+GDG-020,Kendaraan Tahanan (Transpas),Isuzu Elf,2019,1,Gudang BMN,Baik

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIM-BMN | Rutan Kelas IIB Wates</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-database-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { kemenkumham: '#0D47A1', kemenkumhamLight: '#1565C0', appBg: '#F4F6F9' },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { background-color: #F4F6F9; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .modal-enter { animation: fadeIn 0.2s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        @media print {
+            body { background-color: white !important; }
+            .no-print { display: none !important; }
+            aside, header, .mobile-nav { display: none !important; }
+            main { padding: 0 !important; margin: 0 !important; overflow: visible !important; width: 100% !important; }
+            #sec-dashboard, #sec-inspeksi { display: none !important; }
+            #sec-data-bmn { display: block !important; }
+            .bg-white { box-shadow: none !important; border: none !important; }
+            .overflow-x-auto { overflow: visible !important; }
+            table { width: 100%; border-collapse: collapse !important; }
+            th, td { border: 1px solid #000 !important; padding: 8px !important; color: #000 !important; }
+            .print-header { display: block !important; text-align: center; margin-bottom: 20px; }
+        }
+        .print-header { display: none; }
+    </style>
+</head>
+<body class="font-sans text-gray-800 h-screen flex overflow-hidden">
+
+    <aside class="w-64 bg-kemenkumham text-white flex flex-col hidden md:flex flex-shrink-0 shadow-xl z-20 no-print">
+        <div class="p-6 flex items-center gap-4 border-b border-blue-800">
+            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-kemenkumham text-2xl font-bold shadow-inner"><i class="fas fa-building-shield"></i></div>
+            <div><h1 class="font-bold text-sm leading-tight tracking-wide">SIM-BMN</h1><p class="text-[10px] text-blue-200">Rutan Kelas IIB Wates</p></div>
+        </div>
+        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+            <p class="text-[10px] font-bold text-blue-300 uppercase tracking-widest mb-2 px-3">Menu Utama</p>
+            <button onclick="switchMenu('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-kemenkumhamLight text-white font-bold transition shadow-md"><i class="fas fa-chart-line w-5 text-center"></i> Dashboard Utama</button>
+            <button onclick="switchMenu('data-bmn')" id="nav-data-bmn" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-blue-100 hover:bg-kemenkumhamLight/50 font-medium transition"><i class="fas fa-boxes w-5 text-center"></i> Data Aset BMN</button>
+            <button onclick="switchMenu('inspeksi')" id="nav-inspeksi" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-blue-100 hover:bg-kemenkumhamLight/50 font-medium transition"><i class="fas fa-clipboard-check w-5 text-center"></i> Inspeksi Ruangan</button>
+        </nav>
+    </aside>
+
+    <div class="flex-1 flex flex-col h-full relative">
+        <header class="md:hidden bg-kemenkumham text-white p-4 flex justify-between items-center shadow-md z-20 no-print">
+            <div class="flex items-center gap-3"><i class="fas fa-building-shield text-2xl"></i><div><h1 class="font-bold text-sm">SIM-BMN</h1><p class="text-[10px] text-blue-200">Rutan Kelas IIB Wates</p></div></div>
+            <button class="text-white text-xl"><i class="fas fa-bars"></i></button>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-4 md:p-8 w-full pb-20 md:pb-8">
+            <div id="sec-dashboard" class="content-section block space-y-6">
+                <div><h2 class="text-2xl font-bold text-gray-800">Dashboard Pengelola BMN</h2><p class="text-sm text-gray-500 mt-1">Pantauan terpusat kondisi aset, penempatan ruangan, dan aktivitas terkini.</p></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                    <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm flex items-center gap-4 border-l-4 border-l-kemenkumham"><div class="w-12 h-12 rounded-full bg-blue-50 text-kemenkumham flex items-center justify-center text-xl"><i class="fas fa-cubes"></i></div><div><p class="text-[10px] font-bold text-gray-400 uppercase">Total Fisik Aset</p><h3 class="text-2xl font-black text-gray-800" id="dash-total">0</h3></div></div>
+                    <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm flex items-center gap-4 border-l-4 border-l-green-500"><div class="w-12 h-12 rounded-full bg-green-50 text-green-500 flex items-center justify-center text-xl"><i class="fas fa-check-circle"></i></div><div><p class="text-[10px] font-bold text-gray-400 uppercase">Fisik Kondisi Baik</p><h3 class="text-2xl font-black text-gray-800" id="dash-baik">0</h3></div></div>
+                    <div class="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm flex items-center gap-4 border-l-4 border-l-red-500 cursor-pointer hover:bg-red-50 transition" onclick="keMenuRusak()"><div class="w-12 h-12 rounded-full bg-red-50 text-red-500 flex items-center justify-center text-xl"><i class="fas fa-tools"></i></div><div><p class="text-[10px] font-bold text-gray-400 uppercase">Perlu Restock / Rusak</p><h3 class="text-2xl font-black text-red-600" id="dash-rusak">0</h3></div></div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+                    <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm flex flex-col">
+                        <div class="flex justify-between items-center mb-4 pb-3 border-b border-gray-100"><h3 class="font-bold text-sm text-gray-800"><i class="fas fa-history text-blue-500 mr-2"></i>Aset Masuk Terkini</h3><button onclick="switchMenu('data-bmn')" class="text-[10px] font-bold text-blue-600 hover:underline">Lihat Data BMN</button></div>
+                        <div class="flex-1 overflow-x-auto hide-scrollbar"><table class="w-full text-left text-xs md:text-sm"><tbody id="dash-recent-table" class="divide-y divide-gray-100 text-gray-700"></tbody></table></div>
+                    </div>
+                    <div class="flex flex-col gap-4 md:gap-6">
+                        <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm flex-1"><div class="flex justify-between items-center mb-4 pb-3 border-b border-gray-100"><h3 class="font-bold text-sm text-gray-800"><i class="fas fa-map-marker-alt text-red-500 mr-2"></i>Distribusi per Ruangan</h3></div><div id="dash-ruangan-list" class="space-y-3"></div></div>
+                        <div class="bg-blue-900 rounded-2xl p-5 shadow-sm text-white flex justify-between items-center relative overflow-hidden"><i class="fas fa-clipboard-check absolute -right-4 -bottom-4 text-6xl text-blue-800 opacity-50"></i><div class="z-10"><h3 class="font-bold text-sm mb-1">Status Inspeksi Ruangan</h3><p class="text-[10px] text-blue-200">Belum ada inspeksi DBR bulan ini.</p></div><button onclick="switchMenu('inspeksi')" class="z-10 bg-white text-blue-900 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-gray-100 transition shadow-sm">Mulai Cek</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="sec-data-bmn" class="content-section hidden space-y-6">
+                <div class="print-header"><h2 style="font-size: 18px; font-weight: bold; margin-bottom: 5px;">LAPORAN INVENTARIS BARANG MILIK NEGARA (BMN)</h2><h3 style="font-size: 16px; margin-bottom: 20px;">RUTAN KELAS IIB WATES</h3><hr style="border: 1px solid black; margin-bottom: 20px;"></div>
+
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 no-print">
+                    <div><h2 class="text-2xl font-bold text-gray-800">Daftar Barang Milik Negara</h2><p class="text-sm text-gray-500 mt-1">Manajemen master data dan rekapitulasi aset.</p></div>
+                    <div class="flex flex-wrap gap-2 w-full lg:w-auto">
+                        <input type="file" id="file-import-bmn" class="hidden" accept=".xlsx, .xls, .csv" onchange="prosesImportExcel(event)">
+                        <button onclick="document.getElementById('file-import-bmn').click()" class="flex-1 lg:flex-none bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-xl font-bold hover:bg-gray-50 transition shadow-sm text-xs md:text-sm flex items-center justify-center gap-2"><i class="fas fa-sync"></i> Sinkronisasi Excel</button>
+                        <button onclick="window.print()" class="flex-1 lg:flex-none bg-green-600 text-white px-3 py-2 rounded-xl font-bold hover:bg-green-700 transition shadow-sm text-xs md:text-sm flex items-center justify-center gap-2"><i class="fas fa-print"></i> Cetak Laporan</button>
+                        <button onclick="bukaModalBMN()" class="flex-1 lg:flex-none bg-kemenkumham text-white px-3 py-2 rounded-xl font-bold hover:bg-blue-800 transition shadow-sm text-xs md:text-sm flex items-center justify-center gap-2"><i class="fas fa-plus"></i> Tambah Aset</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="p-4 border-b border-gray-100 flex flex-col sm:flex-row gap-3 bg-gray-50/50 no-print">
+                        <div class="relative flex-1"><i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i><input type="text" id="search-bmn" onkeyup="renderTabelBMN()" placeholder="Cari NUP, Nama Barang..." class="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-kemenkumham text-sm"></div>
+                        <select id="filter-ruangan" onchange="renderTabelBMN()" class="py-2 px-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-kemenkumham text-sm bg-white font-medium"><option value="ALL">Semua Ruangan</option><option value="Gudang BMN">Gudang BMN</option><option value="Ruang KPR">Ruang KPR</option><option value="Blok Hunian">Blok Hunian</option><option value="Dapur">Dapur</option><option value="Poliklinik">Poliklinik</option></select>
+                        <select id="filter-kondisi" onchange="renderTabelBMN()" class="py-2 px-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-kemenkumham text-sm bg-white font-medium"><option value="ALL">Semua Kondisi</option><option value="Baik">Kondisi Baik</option><option value="Rusak">Rusak / Perlu Restock</option></select>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap" id="print-table">
+                            <thead class="bg-gray-50 border-b border-gray-200 text-gray-500"><tr><th class="p-3 font-bold">NUP / Kode</th><th class="p-3 font-bold">Nama Barang</th><th class="p-3 font-bold">Merk/Tipe</th><th class="p-3 font-bold text-center">Tahun</th><th class="p-3 font-bold">Penempatan</th><th class="p-3 font-bold text-center">Jumlah</th><th class="p-3 font-bold text-center">Kondisi</th><th class="p-3 font-bold text-center no-print">Aksi</th></tr></thead>
+                            <tbody id="tabel-bmn" class="divide-y divide-gray-100 font-medium text-gray-700"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="sec-inspeksi" class="content-section hidden flex flex-col items-center justify-center h-[60vh] text-center space-y-4 no-print">
+                <div class="w-24 h-24 bg-blue-50 text-blue-300 rounded-full flex items-center justify-center text-4xl mb-4"><i class="fas fa-clipboard-list"></i></div>
+                <h2 class="text-2xl font-bold text-gray-800">Modul Inspeksi & DBR</h2>
+                <p class="text-gray-500 max-w-md text-sm">Fitur otomatisasi pencocokan Daftar Barang Ruangan (DBR) dan pelaporan kondisi fisik sedang dalam tahap pengembangan akhir.</p>
+                <button onclick="switchMenu('dashboard')" class="mt-4 bg-gray-100 text-gray-600 px-4 py-2 rounded-xl font-bold text-sm hover:bg-gray-200 transition">Kembali ke Dashboard</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL FORM TAMBAH ASET -->
+    <div id="modal-bmn" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm p-4 no-print">
+        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl modal-enter overflow-hidden">
+            <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                <h3 class="font-bold text-gray-800 text-lg"><i class="fas fa-file-signature text-kemenkumham mr-2"></i> Form Registrasi BMN</h3>
+                <button onclick="tutupModalBMN()" class="text-gray-400 hover:text-red-500 transition"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div><label class="block text-xs font-bold text-gray-500 mb-1">NUP/Kode</label><input type="text" id="inp-nup" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-kemenkumham focus:ring-1 focus:ring-kemenkumham text-sm font-bold uppercase" placeholder="Misal: 001"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 mb-1">Tahun</label><input type="number" id="inp-tahun" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-kemenkumham focus:ring-1 focus:ring-kemenkumham text-sm" placeholder="YYYY"></div>
+                    <div><label class="block text-xs font-bold text-gray-500 mb-1">Jumlah</label><input type="number" id="inp-jumlah" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-kemenkumham focus:ring-1 focus:ring-kemenkumham text-sm font-bold text-kemenkumham" placeholder="Stok" value="1" min="1"></div>
+                </div>
+                <div><label class="block text-xs font-bold text-gray-500 mb-1">Uraian / Nama Barang</label><input type="text" id="inp-nama" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-kemenkumham focus:ring-1 focus:ring-kemenkumham text-sm font-medium" placeholder="Contoh: Laptop / PC Desktop"></div>
+                <div><label class="block text-xs font-bold text-gray-500 mb-1">Merk / Tipe</label><input type="text" id="inp-merk" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-kemenkumham focus:ring-1 focus:ring-kemenkumham text-sm font-medium" placeholder="Contoh: Lenovo Thinkpad T480"></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block text-xs font-bold text-gray-500 mb-1">Lokasi Penempatan</label><select id="inp-ruangan" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-kemenkumham focus:ring-1 focus:ring-kemenkumham text-sm bg-white"><option value="Gudang BMN">Gudang BMN</option><option value="Ruang KPR">Ruang KPR</option><option value="Blok Hunian">Blok Hunian</option><option value="Dapur">Dapur</option><option value="Poliklinik">Poliklinik</option></select></div>
+                    <div><label class="block text-xs font-bold text-gray-500 mb-1">Kondisi Fisik</label><select id="inp-kondisi" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-kemenkumham focus:ring-1 focus:ring-kemenkumham text-sm bg-white"><option value="Baik">Baik</option><option value="Rusak Ringan">Rusak Ringan</option><option value="Rusak Berat">Rusak Berat</option></select></div>
+                </div>
+            </div>
+            <div class="p-5 border-t border-gray-100 bg-gray-50 flex gap-3">
+                <button onclick="tutupModalBMN()" class="flex-1 bg-white border border-gray-200 text-gray-600 font-bold py-3 rounded-xl hover:bg-gray-50 transition text-sm">Batal</button>
+                <button onclick="simpanBMN()" class="flex-1 bg-kemenkumham text-white font-bold py-3 rounded-xl hover:bg-blue-800 transition text-sm shadow-md">Simpan Data</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const firebaseConfig = { apiKey: "AIzaSyBDBfVdpDACXFMoxiuYSSUj8WAvHBAXs4w", authDomain: "rental-portofolio.firebaseapp.com", databaseURL: "https://rental-portofolio-default-rtdb.firebaseio.com", projectId: "rental-portofolio" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        let dbAset = [];
+
+        db.ref('bmn_aset').on('value', (snapshot) => {
+            dbAset = Object.keys(snapshot.val() || {}).map(key => ({ ...snapshot.val()[key], fbKey: key }));
+            renderTabelBMN();
+            renderDashboard();
+        });
+
+        function switchMenu(menuId) {
+            document.querySelectorAll('.content-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById('sec-' + menuId).classList.remove('hidden');
+            document.querySelectorAll('aside nav button').forEach(el => { el.classList.remove('bg-kemenkumhamLight', 'shadow-md', 'text-white'); el.classList.add('text-blue-100'); });
+            let activeBtn = document.getElementById('nav-' + menuId);
+            if(activeBtn) { activeBtn.classList.remove('text-blue-100'); activeBtn.classList.add('bg-kemenkumhamLight', 'shadow-md', 'text-white'); }
+        }
+
+        function keMenuRusak() { switchMenu('data-bmn'); document.getElementById('filter-kondisi').value = 'Rusak'; renderTabelBMN(); }
+
+        function bukaModalBMN() { document.getElementById('modal-bmn').classList.remove('hidden'); }
+        function tutupModalBMN() { document.getElementById('modal-bmn').classList.add('hidden'); document.getElementById('inp-nup').value = ''; document.getElementById('inp-nama').value = ''; document.getElementById('inp-merk').value = ''; document.getElementById('inp-tahun').value = ''; document.getElementById('inp-jumlah').value = '1'; }
+
+        function simpanBMN() {
+            let nup = document.getElementById('inp-nup').value.toUpperCase();
+            let nama = document.getElementById('inp-nama').value;
+            let merk = document.getElementById('inp-merk').value || '-';
+            let tahun = document.getElementById('inp-tahun').value || new Date().getFullYear();
+            let jumlah = parseInt(document.getElementById('inp-jumlah').value) || 1;
+            let ruangan = document.getElementById('inp-ruangan').value;
+            let kondisi = document.getElementById('inp-kondisi').value;
+            
+            if(!nup || !nama) return alert("NUP dan Nama Barang wajib diisi!");
+            
+            // Cek duplikasi NUP (Upsert Validation)
+            let existingAset = dbAset.find(a => a.nup === nup);
+            let payload = { nup, nama, merk, tahun, jumlah, ruangan, kondisi, timestamp: Date.now() };
+
+            if(existingAset) {
+                if(confirm(`Perhatian: NUP "${nup}" sudah terdaftar atas nama "${existingAset.nama}". \nApakah Anda ingin memperbarui data tersebut?`)) {
+                    db.ref('bmn_aset/' + existingAset.fbKey).update(payload);
+                    tutupModalBMN();
+                }
+            } else {
+                db.ref('bmn_aset').push(payload);
+                tutupModalBMN();
+            }
+        }
+
+        function hapusBMN(fbKey) { if(confirm("Yakin ingin menghapus data aset ini permanen?")) db.ref('bmn_aset/' + fbKey).remove(); }
+
+        function renderTabelBMN() {
+            let keyword = document.getElementById('search-bmn').value.toLowerCase();
+            let filterRuang = document.getElementById('filter-ruangan').value;
+            let filterKondisi = document.getElementById('filter-kondisi').value;
+            
+            let filteredAset = dbAset.filter(a => {
+                let mKey = a.nama.toLowerCase().includes(keyword) || a.nup.toLowerCase().includes(keyword) || a.merk.toLowerCase().includes(keyword);
+                let mRuang = (filterRuang === 'ALL') || (a.ruangan === filterRuang);
+                let mKondisi = (filterKondisi === 'ALL') || (filterKondisi === 'Baik' && a.kondisi === 'Baik') || (filterKondisi === 'Rusak' && a.kondisi !== 'Baik');
+                return mKey && mRuang && mKondisi;
+            });
+
+            let html = '';
+            filteredAset.forEach(a => {
+                let badgeKondisi = a.kondisi === 'Baik' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
+                let qty = a.jumlah || 1;
+                html += `<tr class="hover:bg-gray-50 transition border-b border-gray-50"><td class="p-3 font-bold text-kemenkumham text-xs">${a.nup}</td><td class="p-3 font-bold text-gray-800">${a.nama}</td><td class="p-3 text-gray-500 text-xs">${a.merk}</td><td class="p-3 text-center text-gray-500 text-xs">${a.tahun}</td><td class="p-3 font-medium text-gray-700 text-xs"><i class="fas fa-map-marker-alt text-gray-400 mr-1"></i> ${a.ruangan}</td><td class="p-3 text-center font-bold text-kemenkumham">${qty}</td><td class="p-3 text-center"><span class="px-2 py-1 rounded text-[10px] font-bold uppercase ${badgeKondisi}">${a.kondisi}</span></td><td class="p-3 text-center no-print"><button onclick="hapusBMN('${a.fbKey}')" class="text-red-500 hover:bg-red-50 p-2 rounded-lg transition"><i class="fas fa-trash"></i></button></td></tr>`;
+            });
+            document.getElementById('tabel-bmn').innerHTML = html || '<tr><td colspan="8" class="text-center py-10 text-gray-400">Tidak ada data aset ditemukan.</td></tr>';
+        }
+
+        function renderDashboard() {
+            let totalQty = dbAset.reduce((sum, a) => sum + (parseInt(a.jumlah) || 1), 0);
+            let baikQty = dbAset.filter(a => a.kondisi === 'Baik').reduce((sum, a) => sum + (parseInt(a.jumlah) || 1), 0);
+            let rusakQty = dbAset.filter(a => a.kondisi !== 'Baik').reduce((sum, a) => sum + (parseInt(a.jumlah) || 1), 0);
+
+            document.getElementById('dash-total').innerText = totalQty + " Pcs";
+            document.getElementById('dash-baik').innerText = baikQty + " Pcs";
+            document.getElementById('dash-rusak').innerText = rusakQty + " Pcs";
+
+            let sortedAset = [...dbAset].sort((a,b) => b.timestamp - a.timestamp).slice(0, 5);
+            let htmlRecent = '';
+            sortedAset.forEach(a => {
+                let badge = a.kondisi === 'Baik' ? 'text-green-500' : 'text-red-500';
+                htmlRecent += `<tr class="border-b border-gray-50 last:border-0"><td class="py-3 font-bold text-kemenkumham text-xs w-1/4">${a.nup}</td><td class="py-3 font-medium truncate max-w-[150px]">${a.nama} (${a.jumlah || 1} Pcs)</td><td class="py-3 text-right"><span class="text-[10px] font-bold uppercase ${badge}">${a.kondisi}</span></td></tr>`;
+            });
+            document.getElementById('dash-recent-table').innerHTML = htmlRecent || '<tr><td colspan="3" class="text-center py-4 text-gray-400 text-xs">Belum ada data.</td></tr>';
+
+            let counts = {};
+            dbAset.forEach(a => { let qty = parseInt(a.jumlah) || 1; counts[a.ruangan] = (counts[a.ruangan] || 0) + qty; });
+            let htmlRuang = '';
+            for(let r in counts) { htmlRuang += `<div class="flex justify-between items-center bg-gray-50 p-2.5 rounded-lg border border-gray-100"><span class="text-xs font-bold text-gray-700">${r}</span><span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[10px] font-bold">${counts[r]} Pcs</span></div>`; }
+            document.getElementById('dash-ruangan-list').innerHTML = htmlRuang || '<p class="text-xs text-gray-400 text-center py-2">Belum ada distribusi ruangan.</p>';
+        }
+
+        // ================= UPDATE LOGIKA IMPORT (UPSERT VALIDATION) =================
+        function prosesImportExcel(event) {
+            let file = event.target.files[0]; if (!file) return; let reader = new FileReader();
+            reader.onload = function(e) {
+                let data = new Uint8Array(e.target.result); let workbook = XLSX.read(data, {type: 'array'});
+                let firstSheet = workbook.SheetNames[0]; let elements = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheet]);
+                if(elements.length === 0) return alert("File Excel kosong atau format tidak sesuai!");
+                
+                if(confirm(`Ditemukan ${elements.length} data. Mulai sinkronisasi ke database?`)) {
+                    let inserted = 0; let updated = 0;
+                    
+                    elements.forEach(row => {
+                        let nupRaw = row['NUP'] || row['Kode'] || row['Kode Barang'];
+                        if(!nupRaw) return; // Skip jika tidak ada NUP
+                        
+                        let nup = String(nupRaw).toUpperCase(); 
+                        let nama = row['Nama Barang'] || row['Uraian'] || row['Nama Aset']; 
+                        let merk = row['Merk'] || row['Tipe'] || row['Merk/Tipe']; 
+                        let tahun = row['Tahun'] || row['Tahun Perolehan']; 
+                        let jumlah = row['Jumlah'] || row['Stok'] || row['Qty'] || 1; 
+                        let ruangan = row['Ruangan'] || row['Lokasi'] || row['Penempatan']; 
+                        let kondisi = row['Kondisi'] || row['Kondisi Fisik'] || 'Baik';
+                        
+                        if(nup && nama) { 
+                            let payload = { 
+                                nup: nup, 
+                                nama: String(nama), 
+                                merk: merk ? String(merk) : '-', 
+                                tahun: parseInt(tahun) || new Date().getFullYear(), 
+                                jumlah: parseInt(jumlah) || 1,
+                                ruangan: ruangan ? String(ruangan) : 'Gudang BMN', 
+                                kondisi: String(kondisi), 
+                                timestamp: Date.now() 
+                            };
+
+                            let existingAset = dbAset.find(a => a.nup === nup);
+                            
+                            // Logika Upsert (Update jika ada, Insert jika baru)
+                            if(existingAset) {
+                                db.ref('bmn_aset/' + existingAset.fbKey).update(payload);
+                                updated++;
+                            } else {
+                                db.ref('bmn_aset').push(payload);
+                                inserted++;
+                            }
+                        }
+                    });
+                    alert(`Sinkronisasi Selesai!\n- ${inserted} Data Baru Ditambahkan\n- ${updated} Data Lama Diperbarui`);
+                } event.target.value = '';
+            }; reader.readAsArrayBuffer(file);
+        }
+    </script>
+</body>
+</html>
