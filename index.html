@@ -28,8 +28,11 @@
         .modal-enter { animation: fadeIn 0.2s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         
+        /* Area aman untuk pengguna iOS (iPhone Home Bar) */
+        .pb-safe { padding-bottom: max(15px, env(safe-area-inset-bottom)); padding-top: 10px; }
+
         @media print {
-            body { background-color: white !important; }
+            body { background-color: white !important; height: auto !important; overflow: visible !important; }
             .no-print { display: none !important; }
             aside, header, .mobile-bottom-nav { display: none !important; }
             main { padding: 0 !important; margin: 0 !important; overflow: visible !important; width: 100% !important; }
@@ -44,7 +47,8 @@
         .print-header { display: none; }
     </style>
 </head>
-<body class="font-sans text-gray-800 h-screen flex overflow-hidden">
+<!-- Menggunakan 100dvh agar sesuai dengan dynamic viewport HP -->
+<body class="font-sans text-gray-800 flex overflow-hidden" style="height: 100vh; height: 100dvh;">
 
     <!-- SIDEBAR DESKTOP -->
     <aside class="w-64 bg-kemenkumham text-white flex flex-col hidden md:flex flex-shrink-0 shadow-xl z-20 no-print">
@@ -60,13 +64,16 @@
         </nav>
     </aside>
 
-    <div class="flex-1 flex flex-col h-full relative">
-        <!-- HEADER MOBILE (Tombol Garis Tiga Dihapus) -->
-        <header class="md:hidden bg-kemenkumham text-white p-4 flex justify-between items-center shadow-md z-20 no-print">
+    <!-- WRAPPER KONTEN UTAMA (STRUKTUR FLEX KOLOM) -->
+    <div class="flex-1 flex flex-col h-full relative w-full">
+        
+        <!-- HEADER MOBILE -->
+        <header class="flex-none md:hidden bg-kemenkumham text-white p-4 flex justify-between items-center shadow-md z-20 no-print">
             <div class="flex items-center gap-3"><i class="fas fa-building-shield text-2xl"></i><div><h1 class="font-bold text-sm">SIM-BMN</h1><p class="text-[10px] text-blue-200">Rutan Kelas IIB Wates</p></div></div>
         </header>
 
-        <main class="flex-1 overflow-y-auto p-4 md:p-8 w-full pb-24 md:pb-8">
+        <!-- KONTEN BISA DI-SCROLL (Akan otomatis berhenti di atas bottom bar) -->
+        <main class="flex-1 overflow-y-auto p-4 md:p-8 w-full">
             <div id="sec-dashboard" class="content-section block space-y-6">
                 <div><h2 class="text-2xl font-bold text-gray-800">Dashboard Pengelola BMN</h2><p class="text-sm text-gray-500 mt-1">Pantauan terpusat kondisi aset, penempatan ruangan, dan aktivitas terkini.</p></div>
 
@@ -123,23 +130,24 @@
                 <button onclick="switchMenu('dashboard')" class="mt-4 bg-gray-100 text-gray-600 px-4 py-2 rounded-xl font-bold text-sm hover:bg-gray-200 transition">Kembali ke Dashboard</button>
             </div>
         </main>
-    </div>
 
-    <!-- MOBILE BOTTOM NAVIGATION -->
-    <nav class="mobile-bottom-nav md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-2px_15px_rgba(0,0,0,0.05)] flex justify-around items-center py-2 z-50 no-print pb-safe">
-        <button onclick="switchMenu('dashboard')" id="mob-nav-dashboard" class="flex flex-col items-center p-2 text-kemenkumham transition w-full">
-            <i class="fas fa-chart-line text-xl mb-1"></i>
-            <span class="text-[10px] font-bold">Dashboard</span>
-        </button>
-        <button onclick="switchMenu('data-bmn')" id="mob-nav-data-bmn" class="flex flex-col items-center p-2 text-gray-400 hover:text-kemenkumham transition w-full">
-            <i class="fas fa-boxes text-xl mb-1"></i>
-            <span class="text-[10px] font-medium">Data BMN</span>
-        </button>
-        <button onclick="switchMenu('inspeksi')" id="mob-nav-inspeksi" class="flex flex-col items-center p-2 text-gray-400 hover:text-kemenkumham transition w-full">
-            <i class="fas fa-clipboard-check text-xl mb-1"></i>
-            <span class="text-[10px] font-medium">Inspeksi</span>
-        </button>
-    </nav>
+        <!-- BOTTOM NAVIGATION MOBILE (Tidak pakai Fixed, pakai Flex-None agar menolak tindih konten) -->
+        <nav class="mobile-bottom-nav md:hidden flex-none w-full bg-white border-t border-gray-200 shadow-[0_-5px_15px_rgba(0,0,0,0.05)] flex justify-around items-center z-50 no-print pb-safe">
+            <button onclick="switchMenu('dashboard')" id="mob-nav-dashboard" class="flex flex-col items-center p-2 text-kemenkumham transition w-full">
+                <i class="fas fa-chart-line text-xl mb-1"></i>
+                <span class="text-[10px] font-bold">Dashboard</span>
+            </button>
+            <button onclick="switchMenu('data-bmn')" id="mob-nav-data-bmn" class="flex flex-col items-center p-2 text-gray-400 hover:text-kemenkumham transition w-full">
+                <i class="fas fa-boxes text-xl mb-1"></i>
+                <span class="text-[10px] font-medium">Data BMN</span>
+            </button>
+            <button onclick="switchMenu('inspeksi')" id="mob-nav-inspeksi" class="flex flex-col items-center p-2 text-gray-400 hover:text-kemenkumham transition w-full">
+                <i class="fas fa-clipboard-check text-xl mb-1"></i>
+                <span class="text-[10px] font-medium">Inspeksi</span>
+            </button>
+        </nav>
+
+    </div>
 
     <!-- MODAL FORM TAMBAH ASET -->
     <div id="modal-bmn" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm p-4 no-print">
@@ -182,7 +190,6 @@
         });
 
         function switchMenu(menuId) {
-            // Sembunyikan semua section
             document.querySelectorAll('.content-section').forEach(el => el.classList.add('hidden'));
             document.getElementById('sec-' + menuId).classList.remove('hidden');
             
@@ -229,7 +236,6 @@
             
             if(!nup || !nama) return alert("NUP dan Nama Barang wajib diisi!");
             
-            // Cek duplikasi NUP (Upsert Validation)
             let existingAset = dbAset.find(a => a.nup === nup);
             let payload = { nup, nama, merk, tahun, jumlah, ruangan, kondisi, timestamp: Date.now() };
 
@@ -303,7 +309,7 @@
                     
                     elements.forEach(row => {
                         let nupRaw = row['NUP'] || row['Kode'] || row['Kode Barang'];
-                        if(!nupRaw) return; // Skip jika tidak ada NUP
+                        if(!nupRaw) return; 
                         
                         let nup = String(nupRaw).toUpperCase(); 
                         let nama = row['Nama Barang'] || row['Uraian'] || row['Nama Aset']; 
@@ -327,7 +333,6 @@
 
                             let existingAset = dbAset.find(a => a.nup === nup);
                             
-                            // Logika Upsert (Update jika ada, Insert jika baru)
                             if(existingAset) {
                                 db.ref('bmn_aset/' + existingAset.fbKey).update(payload);
                                 updated++;
@@ -337,7 +342,6 @@
                             }
                         }
                     });
-                    // Perbaikan penulisan string template alert
                     alert(`Sinkronisasi Selesai!\n${inserted} Data Baru Ditambahkan\n${updated} Data Lama Diperbarui`);
                 } 
                 event.target.value = '';
