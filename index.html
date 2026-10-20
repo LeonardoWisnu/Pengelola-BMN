@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Sistem Informasi BMN | Rutan Kelas IIB Wates</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -47,14 +47,20 @@
         .print-header { display: none; }
     </style>
 </head>
-<!-- Menggunakan 100dvh agar sesuai dengan dynamic viewport HP -->
-<body class="font-sans text-gray-800 flex overflow-hidden" style="height: 100vh; height: 100dvh;">
+<!-- Menggunakan 100dvh untuk layar seluler, mencegah tumpang tindih dengan URL bar -->
+<body class="font-sans text-gray-800 flex overflow-hidden bg-appBg w-screen" style="height: 100vh; height: 100dvh;">
 
     <!-- SIDEBAR DESKTOP -->
     <aside class="w-64 bg-kemenkumham text-white flex flex-col hidden md:flex flex-shrink-0 shadow-xl z-20 no-print">
         <div class="p-6 flex items-center gap-4 border-b border-blue-800">
-            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-kemenkumham text-2xl font-bold shadow-inner"><i class="fas fa-building-shield"></i></div>
-            <div><h1 class="font-bold text-sm leading-tight tracking-wide">Sistem Informasi BMN</h1><p class="text-[10px] text-blue-200">Rutan Kelas IIB Wates</p></div>
+            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1.5 shadow-inner">
+                <!-- Logo Kemenkumham/Kemenimipas -->
+                <img src="D:\Pekerjaan\Pencarian Barang BMN App\logo kemenimipas.png" alt="Logo Kemenkumham" class="w-full h-full object-contain">
+            </div>
+            <div>
+                <h1 class="font-bold text-sm leading-tight tracking-wide">Sistem Informasi BMN</h1>
+                <p class="text-[10px] text-blue-200">Rutan Kelas IIB Wates</p>
+            </div>
         </div>
         <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
             <p class="text-[10px] font-bold text-blue-300 uppercase tracking-widest mb-2 px-3">Menu Utama</p>
@@ -64,16 +70,25 @@
         </nav>
     </aside>
 
-    <!-- WRAPPER KONTEN UTAMA (STRUKTUR FLEX KOLOM) -->
-    <div class="flex-1 flex flex-col h-full relative w-full">
+    <!-- WRAPPER KONTEN UTAMA DENGAN MIN-W-0 AGAR TABEL TIDAK MERUSAK LAYAR -->
+    <div class="flex-1 flex flex-col h-full relative min-w-0">
         
         <!-- HEADER MOBILE -->
         <header class="flex-none md:hidden bg-kemenkumham text-white p-4 flex justify-between items-center shadow-md z-20 no-print">
-            <div class="flex items-center gap-3"><i class="fas fa-building-shield text-2xl"></i><div><h1 class="font-bold text-sm">SIM-BMN</h1><p class="text-[10px] text-blue-200">Rutan Kelas IIB Wates</p></div></div>
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center p-1 shadow-sm">
+                    <!-- Logo Kemenkumham/Kemenimipas Mobile -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Logo_Kementerian_Hukum_dan_HAM_Republik_Indonesia.png/600px-Logo_Kementerian_Hukum_dan_HAM_Republik_Indonesia.png" alt="Logo Kemenkumham" class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <h1 class="font-bold text-sm">SIM-BMN</h1>
+                    <p class="text-[10px] text-blue-200">Rutan Kelas IIB Wates</p>
+                </div>
+            </div>
         </header>
 
-        <!-- KONTEN BISA DI-SCROLL (Akan otomatis berhenti di atas bottom bar) -->
-        <main class="flex-1 overflow-y-auto p-4 md:p-8 w-full">
+        <!-- KONTEN BISA DI-SCROLL -->
+        <main class="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-8 w-full">
             <div id="sec-dashboard" class="content-section block space-y-6">
                 <div><h2 class="text-2xl font-bold text-gray-800">Dashboard Pengelola BMN</h2><p class="text-sm text-gray-500 mt-1">Pantauan terpusat kondisi aset, penempatan ruangan, dan aktivitas terkini.</p></div>
 
@@ -84,11 +99,11 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-                    <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm flex flex-col">
+                    <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm flex flex-col min-w-0">
                         <div class="flex justify-between items-center mb-4 pb-3 border-b border-gray-100"><h3 class="font-bold text-sm text-gray-800"><i class="fas fa-history text-blue-500 mr-2"></i>Aset Masuk Terkini</h3><button onclick="switchMenu('data-bmn')" class="text-[10px] font-bold text-blue-600 hover:underline">Lihat Data BMN</button></div>
-                        <div class="flex-1 overflow-x-auto hide-scrollbar"><table class="w-full text-left text-xs md:text-sm"><tbody id="dash-recent-table" class="divide-y divide-gray-100 text-gray-700"></tbody></table></div>
+                        <div class="flex-1 overflow-x-auto hide-scrollbar w-full"><table class="w-full text-left text-xs md:text-sm"><tbody id="dash-recent-table" class="divide-y divide-gray-100 text-gray-700"></tbody></table></div>
                     </div>
-                    <div class="flex flex-col gap-4 md:gap-6">
+                    <div class="flex flex-col gap-4 md:gap-6 min-w-0">
                         <div class="bg-white rounded-2xl p-5 border border-gray-200 shadow-sm flex-1"><div class="flex justify-between items-center mb-4 pb-3 border-b border-gray-100"><h3 class="font-bold text-sm text-gray-800"><i class="fas fa-map-marker-alt text-red-500 mr-2"></i>Distribusi per Ruangan</h3></div><div id="dash-ruangan-list" class="space-y-3"></div></div>
                         <div class="bg-blue-900 rounded-2xl p-5 shadow-sm text-white flex justify-between items-center relative overflow-hidden"><i class="fas fa-clipboard-check absolute -right-4 -bottom-4 text-6xl text-blue-800 opacity-50"></i><div class="z-10"><h3 class="font-bold text-sm mb-1">Status Inspeksi Ruangan</h3><p class="text-[10px] text-blue-200">Belum ada inspeksi DBR bulan ini.</p></div><button onclick="switchMenu('inspeksi')" class="z-10 bg-white text-blue-900 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-gray-100 transition shadow-sm">Mulai Cek</button></div>
                     </div>
@@ -108,14 +123,15 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                <!-- WADAH TABEL DENGAN OVERFLOW HANYA DI SINI -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden w-full">
                     <div class="p-4 border-b border-gray-100 flex flex-col sm:flex-row gap-3 bg-gray-50/50 no-print">
                         <div class="relative flex-1"><i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i><input type="text" id="search-bmn" onkeyup="renderTabelBMN()" placeholder="Cari NUP, Nama Barang..." class="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-kemenkumham text-sm"></div>
                         <select id="filter-ruangan" onchange="renderTabelBMN()" class="py-2 px-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-kemenkumham text-sm bg-white font-medium"><option value="ALL">Semua Ruangan</option><option value="Gudang BMN">Gudang BMN</option><option value="Ruang KPR">Ruang KPR</option><option value="Blok Hunian">Blok Hunian</option><option value="Dapur">Dapur</option><option value="Poliklinik">Poliklinik</option></select>
                         <select id="filter-kondisi" onchange="renderTabelBMN()" class="py-2 px-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-kemenkumham text-sm bg-white font-medium"><option value="ALL">Semua Kondisi</option><option value="Baik">Kondisi Baik</option><option value="Rusak">Rusak / Perlu Restock</option></select>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm whitespace-nowrap" id="print-table">
+                    <div class="overflow-x-auto w-full">
+                        <table class="w-full text-left text-sm whitespace-nowrap min-w-[700px]" id="print-table">
                             <thead class="bg-gray-50 border-b border-gray-200 text-gray-500"><tr><th class="p-3 font-bold">NUP / Kode</th><th class="p-3 font-bold">Nama Barang</th><th class="p-3 font-bold">Merk/Tipe</th><th class="p-3 font-bold text-center">Tahun</th><th class="p-3 font-bold">Penempatan</th><th class="p-3 font-bold text-center">Jumlah</th><th class="p-3 font-bold text-center">Kondisi</th><th class="p-3 font-bold text-center no-print">Aksi</th></tr></thead>
                             <tbody id="tabel-bmn" class="divide-y divide-gray-100 font-medium text-gray-700"></tbody>
                         </table>
@@ -131,7 +147,7 @@
             </div>
         </main>
 
-        <!-- BOTTOM NAVIGATION MOBILE (Tidak pakai Fixed, pakai Flex-None agar menolak tindih konten) -->
+        <!-- BOTTOM NAVIGATION MOBILE (Tidak pakai Fixed, menempel aman di bawah layar) -->
         <nav class="mobile-bottom-nav md:hidden flex-none w-full bg-white border-t border-gray-200 shadow-[0_-5px_15px_rgba(0,0,0,0.05)] flex justify-around items-center z-50 no-print pb-safe">
             <button onclick="switchMenu('dashboard')" id="mob-nav-dashboard" class="flex flex-col items-center p-2 text-kemenkumham transition w-full">
                 <i class="fas fa-chart-line text-xl mb-1"></i>
