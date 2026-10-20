@@ -28,7 +28,6 @@
         .modal-enter { animation: fadeIn 0.2s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Area aman untuk pengguna iOS (iPhone Home Bar) */
         .pb-safe { padding-bottom: max(15px, env(safe-area-inset-bottom)); padding-top: 10px; }
 
         @media print {
@@ -47,15 +46,14 @@
         .print-header { display: none; }
     </style>
 </head>
-<!-- Menggunakan 100dvh untuk layar seluler, mencegah tumpang tindih dengan URL bar -->
 <body class="font-sans text-gray-800 flex overflow-hidden bg-appBg w-screen" style="height: 100vh; height: 100dvh;">
 
     <!-- SIDEBAR DESKTOP -->
     <aside class="w-64 bg-kemenkumham text-white flex flex-col hidden md:flex flex-shrink-0 shadow-xl z-20 no-print">
         <div class="p-6 flex items-center gap-4 border-b border-blue-800">
-            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1.5 shadow-inner">
-                <!-- Logo Kemenkumham/Kemenimipas -->
-                <img src="D:\Pekerjaan\Pencarian Barang BMN App\logo kemenimipas.png" alt="Logo Kemenkumham" class="w-full h-full object-contain">
+            <!-- Lingkaran Logo Desktop: Padding dihapus, ditambah overflow-hidden -->
+            <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center overflow-hidden shadow-inner flex-shrink-0 border-2 border-white">
+                <img src="D:\Pekerjaan\Pencarian Barang BMN App\logo kemenimipas.png" alt="Logo Kemenimipas" class="w-full h-full object-cover scale-110">
             </div>
             <div>
                 <h1 class="font-bold text-sm leading-tight tracking-wide">Sistem Informasi BMN</h1>
@@ -70,15 +68,15 @@
         </nav>
     </aside>
 
-    <!-- WRAPPER KONTEN UTAMA DENGAN MIN-W-0 AGAR TABEL TIDAK MERUSAK LAYAR -->
+    <!-- WRAPPER KONTEN UTAMA -->
     <div class="flex-1 flex flex-col h-full relative min-w-0">
         
         <!-- HEADER MOBILE -->
         <header class="flex-none md:hidden bg-kemenkumham text-white p-4 flex justify-between items-center shadow-md z-20 no-print">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center p-1 shadow-sm">
-                    <!-- Logo Kemenkumham/Kemenimipas Mobile -->
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Logo_Kementerian_Hukum_dan_HAM_Republik_Indonesia.png/600px-Logo_Kementerian_Hukum_dan_HAM_Republik_Indonesia.png" alt="Logo Kemenkumham" class="w-full h-full object-contain">
+                <!-- Lingkaran Logo Mobile: Padding dihapus, ditambah overflow-hidden -->
+                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden shadow-sm flex-shrink-0 border-2 border-white">
+                    <img src="D:\Pekerjaan\Pencarian Barang BMN App\logo kemenimipas.png" alt="Logo Kemenimipas" class="w-full h-full object-cover scale-110">
                 </div>
                 <div>
                     <h1 class="font-bold text-sm">SIM-BMN</h1>
@@ -123,7 +121,6 @@
                     </div>
                 </div>
 
-                <!-- WADAH TABEL DENGAN OVERFLOW HANYA DI SINI -->
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden w-full">
                     <div class="p-4 border-b border-gray-100 flex flex-col sm:flex-row gap-3 bg-gray-50/50 no-print">
                         <div class="relative flex-1"><i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i><input type="text" id="search-bmn" onkeyup="renderTabelBMN()" placeholder="Cari NUP, Nama Barang..." class="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-kemenkumham text-sm"></div>
@@ -147,7 +144,7 @@
             </div>
         </main>
 
-        <!-- BOTTOM NAVIGATION MOBILE (Tidak pakai Fixed, menempel aman di bawah layar) -->
+        <!-- BOTTOM NAVIGATION MOBILE -->
         <nav class="mobile-bottom-nav md:hidden flex-none w-full bg-white border-t border-gray-200 shadow-[0_-5px_15px_rgba(0,0,0,0.05)] flex justify-around items-center z-50 no-print pb-safe">
             <button onclick="switchMenu('dashboard')" id="mob-nav-dashboard" class="flex flex-col items-center p-2 text-kemenkumham transition w-full">
                 <i class="fas fa-chart-line text-xl mb-1"></i>
