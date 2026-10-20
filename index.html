@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIM-BMN | Rutan Kelas IIB Wates</title>
+    <title>Sistem Informasi BMN | Rutan Kelas IIB Wates</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
@@ -31,7 +31,7 @@
         @media print {
             body { background-color: white !important; }
             .no-print { display: none !important; }
-            aside, header, .mobile-nav { display: none !important; }
+            aside, header, .mobile-bottom-nav { display: none !important; }
             main { padding: 0 !important; margin: 0 !important; overflow: visible !important; width: 100% !important; }
             #sec-dashboard, #sec-inspeksi { display: none !important; }
             #sec-data-bmn { display: block !important; }
@@ -46,10 +46,11 @@
 </head>
 <body class="font-sans text-gray-800 h-screen flex overflow-hidden">
 
+    <!-- SIDEBAR DESKTOP -->
     <aside class="w-64 bg-kemenkumham text-white flex flex-col hidden md:flex flex-shrink-0 shadow-xl z-20 no-print">
         <div class="p-6 flex items-center gap-4 border-b border-blue-800">
             <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-kemenkumham text-2xl font-bold shadow-inner"><i class="fas fa-building-shield"></i></div>
-            <div><h1 class="font-bold text-sm leading-tight tracking-wide">SIM-BMN</h1><p class="text-[10px] text-blue-200">Rutan Kelas IIB Wates</p></div>
+            <div><h1 class="font-bold text-sm leading-tight tracking-wide">Sistem Informasi BMN</h1><p class="text-[10px] text-blue-200">Rutan Kelas IIB Wates</p></div>
         </div>
         <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
             <p class="text-[10px] font-bold text-blue-300 uppercase tracking-widest mb-2 px-3">Menu Utama</p>
@@ -60,12 +61,12 @@
     </aside>
 
     <div class="flex-1 flex flex-col h-full relative">
+        <!-- HEADER MOBILE (Tombol Garis Tiga Dihapus) -->
         <header class="md:hidden bg-kemenkumham text-white p-4 flex justify-between items-center shadow-md z-20 no-print">
             <div class="flex items-center gap-3"><i class="fas fa-building-shield text-2xl"></i><div><h1 class="font-bold text-sm">SIM-BMN</h1><p class="text-[10px] text-blue-200">Rutan Kelas IIB Wates</p></div></div>
-            <button class="text-white text-xl"><i class="fas fa-bars"></i></button>
         </header>
 
-        <main class="flex-1 overflow-y-auto p-4 md:p-8 w-full pb-20 md:pb-8">
+        <main class="flex-1 overflow-y-auto p-4 md:p-8 w-full pb-24 md:pb-8">
             <div id="sec-dashboard" class="content-section block space-y-6">
                 <div><h2 class="text-2xl font-bold text-gray-800">Dashboard Pengelola BMN</h2><p class="text-sm text-gray-500 mt-1">Pantauan terpusat kondisi aset, penempatan ruangan, dan aktivitas terkini.</p></div>
 
@@ -124,6 +125,22 @@
         </main>
     </div>
 
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <nav class="mobile-bottom-nav md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-[0_-2px_15px_rgba(0,0,0,0.05)] flex justify-around items-center py-2 z-50 no-print pb-safe">
+        <button onclick="switchMenu('dashboard')" id="mob-nav-dashboard" class="flex flex-col items-center p-2 text-kemenkumham transition w-full">
+            <i class="fas fa-chart-line text-xl mb-1"></i>
+            <span class="text-[10px] font-bold">Dashboard</span>
+        </button>
+        <button onclick="switchMenu('data-bmn')" id="mob-nav-data-bmn" class="flex flex-col items-center p-2 text-gray-400 hover:text-kemenkumham transition w-full">
+            <i class="fas fa-boxes text-xl mb-1"></i>
+            <span class="text-[10px] font-medium">Data BMN</span>
+        </button>
+        <button onclick="switchMenu('inspeksi')" id="mob-nav-inspeksi" class="flex flex-col items-center p-2 text-gray-400 hover:text-kemenkumham transition w-full">
+            <i class="fas fa-clipboard-check text-xl mb-1"></i>
+            <span class="text-[10px] font-medium">Inspeksi</span>
+        </button>
+    </nav>
+
     <!-- MODAL FORM TAMBAH ASET -->
     <div id="modal-bmn" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm p-4 no-print">
         <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl modal-enter overflow-hidden">
@@ -165,11 +182,35 @@
         });
 
         function switchMenu(menuId) {
+            // Sembunyikan semua section
             document.querySelectorAll('.content-section').forEach(el => el.classList.add('hidden'));
             document.getElementById('sec-' + menuId).classList.remove('hidden');
-            document.querySelectorAll('aside nav button').forEach(el => { el.classList.remove('bg-kemenkumhamLight', 'shadow-md', 'text-white'); el.classList.add('text-blue-100'); });
+            
+            // --- Update UI Menu Desktop ---
+            document.querySelectorAll('aside nav button').forEach(el => { 
+                el.classList.remove('bg-kemenkumhamLight', 'shadow-md', 'text-white'); 
+                el.classList.add('text-blue-100'); 
+            });
             let activeBtn = document.getElementById('nav-' + menuId);
-            if(activeBtn) { activeBtn.classList.remove('text-blue-100'); activeBtn.classList.add('bg-kemenkumhamLight', 'shadow-md', 'text-white'); }
+            if(activeBtn) { 
+                activeBtn.classList.remove('text-blue-100'); 
+                activeBtn.classList.add('bg-kemenkumhamLight', 'shadow-md', 'text-white'); 
+            }
+
+            // --- Update UI Menu Mobile (Bottom Nav) ---
+            document.querySelectorAll('.mobile-bottom-nav button').forEach(el => {
+                el.classList.remove('text-kemenkumham');
+                el.classList.add('text-gray-400');
+                el.querySelector('span').classList.remove('font-bold');
+                el.querySelector('span').classList.add('font-medium');
+            });
+            let activeMobBtn = document.getElementById('mob-nav-' + menuId);
+            if(activeMobBtn) {
+                activeMobBtn.classList.remove('text-gray-400');
+                activeMobBtn.classList.add('text-kemenkumham');
+                activeMobBtn.querySelector('span').classList.remove('font-medium');
+                activeMobBtn.querySelector('span').classList.add('font-bold');
+            }
         }
 
         function keMenuRusak() { switchMenu('data-bmn'); document.getElementById('filter-kondisi').value = 'Rusak'; renderTabelBMN(); }
@@ -250,7 +291,6 @@
             document.getElementById('dash-ruangan-list').innerHTML = htmlRuang || '<p class="text-xs text-gray-400 text-center py-2">Belum ada distribusi ruangan.</p>';
         }
 
-        // ================= UPDATE LOGIKA IMPORT (UPSERT VALIDATION) =================
         function prosesImportExcel(event) {
             let file = event.target.files[0]; if (!file) return; let reader = new FileReader();
             reader.onload = function(e) {
@@ -297,9 +337,12 @@
                             }
                         }
                     });
-                    alert(`Sinkronisasi Selesai!\n- ${inserted} Data Baru Ditambahkan\n- ${updated} Data Lama Diperbarui`);
-                } event.target.value = '';
-            }; reader.readAsArrayBuffer(file);
+                    // Perbaikan penulisan string template alert
+                    alert(`Sinkronisasi Selesai!\n${inserted} Data Baru Ditambahkan\n${updated} Data Lama Diperbarui`);
+                } 
+                event.target.value = '';
+            }; 
+            reader.readAsArrayBuffer(file);
         }
     </script>
 </body>
